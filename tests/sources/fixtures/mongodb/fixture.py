@@ -1,15 +1,29 @@
 import os
 
 import bson
-from faker import Faker
 from pymongo import MongoClient
+from tests.commons import WeightedFakeProvider
 
-DATA_SIZE = os.environ.get("DATA_SIZE", "small").lower()
-_SIZES = {"small": 750, "medium": 1500, "large": 3000}
+fake_provider = WeightedFakeProvider(weights=[0.65, 0.3, 0.05, 0]) # extra large is too large for MongoDB record
+
 NUMBER_OF_RECORDS_TO_DELETE = 50
 
-fake = Faker()
+fake = fake_provider.fake
+
 client = MongoClient("mongodb://admin:justtesting@127.0.0.1:27021")
+
+DATA_SIZE = os.environ.get("DATA_SIZE", "medium").lower()
+
+match DATA_SIZE:
+    case "small":
+        RECORD_COUNT = 1000
+    case "medium":
+        RECORD_COUNT = 10000
+    case "large":
+        RECORD_COUNT = 100000
+
+def get_num_docs():
+    print(RECORD_COUNT - NUMBER_OF_RECORDS_TO_DELETE)
 
 
 def setup():
@@ -24,17 +38,15 @@ def load():
             "address": fake.address(),
             "birthdate": fake.date(),
             "time": fake.time(),
-            "comment": fake.sentence(),
+            "comment": fake_provider.get_text(),
         }
 
-    record_number = _SIZES[DATA_SIZE] + NUMBER_OF_RECORDS_TO_DELETE
-
-    print(f"Generating {record_number} random records")
+    print(f"Generating {RECORD_COUNT} random records")
     db = client.sample_database
     collection = db.sample_collection
 
     data = []
-    for _ in range(record_number):
+    for _ in range(RECORD_COUNT):
         data.append(_random_record())
     collection.insert_many(data)
 
