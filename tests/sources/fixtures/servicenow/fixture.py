@@ -8,24 +8,41 @@
 import base64
 import io
 import os
-import random
-import string
 from urllib.parse import parse_qs, urlparse
 
 from flask import Flask, make_response, request
 
-DATA_SIZE = os.environ.get("DATA_SIZE", "small").lower()
-_SIZES = {"small": 500000, "medium": 1000000, "large": 3000000}
-FILE_SIZE = _SIZES[DATA_SIZE]
-LARGE_DATA = "".join([random.choice(string.ascii_letters) for _ in range(FILE_SIZE)])
-TABLE_FETCH_SIZE = 50
+from tests.commons import WeightedFakeProvider
+
+fake_provider = WeightedFakeProvider()
+
+DATA_SIZE = os.environ.get("DATA_SIZE", "medium").lower()
+
+match DATA_SIZE:
+    case "small":
+        RECORDS = 250
+        TABLE_PAGES = 3
+    case "medium":
+        RECORDS = 500
+        TABLE_PAGES = 6
+    case "large":
+        RECORDS = 5000
+        TABLE_PAGES = 12
+    case _:
+        raise Exception(
+            f"Unknown DATA_SIZE: {DATA_SIZE}. Expecting 'small', 'medium' or 'large'"
+        )
+
+TABLE_PAGE_SIZE = 50
+RECORDS_TO_DELETE = 50
 
 
 class ServiceNowAPI:
     def __init__(self):
         self.app = Flask(__name__)
-        self.table_length = 500
-        self.get_table_length_call = 6
+        self.table_length = RECORDS
+        self.get_table_length_call = TABLE_PAGES
+        self.files = {}
         self.app.route("/api/now/table/<string:table>", methods=["GET"])(
             self.get_table_length
         )
@@ -88,12 +105,14 @@ class ServiceNowAPI:
             response.headers["x-total-count"] = 0
         self.get_table_length_call -= 1
         if self.get_table_length_call == 0:
-            self.table_length = 300  # to delete 2000 records per service in next sync
+            self.table_length = (
+                RECORDS - RECORDS_TO_DELETE
+            )  # to delete RECORDS_TO_DELETE records per service in next sync
         return response
 
     def get_table_data(self, table, offset):
         records = []
-        for i in range(offset - TABLE_FETCH_SIZE, offset):
+        for i in range(offset - TABLE_PAGE_SIZE, offset):
             records.append(
                 {
                     "sys_id": f"{table}-{i}",
@@ -106,12 +125,15 @@ class ServiceNowAPI:
         )
 
     def get_attachment_data(self, table_sys_id):
+        file = fake_provider.get_html()
+        attachment_id = f"attachment-{table_sys_id}"
+        self.files[attachment_id] = file
         record = [
             {
-                "sys_id": f"attachment-{table_sys_id}",
-                "sys_updated_on": "1212-12-12",
-                "size_bytes": FILE_SIZE,
-                "file_name": f"{table_sys_id}.txt",
+                "sys_id": attachment_id,
+                "sys_updated_on": "2012-12-12",
+                "size_bytes": len(file.encode("utf-8")),
+                "file_name": f"{table_sys_id}.html",
             }
         ]
         return self.get_servicenow_formatted_data(
@@ -119,7 +141,8 @@ class ServiceNowAPI:
         )
 
     def get_attachment_content(self, sys_id):
-        return io.BytesIO(bytes(LARGE_DATA, encoding="utf-8"))
+        file = self.files[sys_id]
+        return io.BytesIO(bytes(file, encoding="utf-8"))
 
 
 if __name__ == "__main__":
