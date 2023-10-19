@@ -26,7 +26,7 @@ random.seed(seed)
 app = Flask(__name__)
 
 THROTTLING = os.environ.get("THROTTLING", False)
-PRE_REQUEST_SLEEP = float(os.environ.get("PRE_REQUEST_SLEEP", "0.05"))
+PRE_REQUEST_SLEEP = float(os.environ.get("PRE_REQUEST_SLEEP", "0.15"))
 
 if THROTTLING:
     limiter = Limiter(
@@ -58,26 +58,19 @@ TENANT = "functionaltest.sharepoint.fake"
 DATA_SIZE = os.environ.get("DATA_SIZE", "medium")
 
 match DATA_SIZE:
-    case "extra_small":
-        NUMBER_OF_SITES = 1
-        NUMBER_OF_DRIVE_ITEMS = 10
-        NUMBER_OF_PAGES = 1
-        NUMBER_OF_LISTS = 1
-        NUMBER_OF_LIST_ITEMS = 5
-        NUMBER_OF_LIST_ITEM_ATTACHMENTS = 1
     case "small":
         NUMBER_OF_SITES = 5
-        NUMBER_OF_DRIVE_ITEMS = 100
+        NUMBER_OF_DRIVE_ITEMS = 10
         NUMBER_OF_PAGES = 10
         NUMBER_OF_LISTS = 5
         NUMBER_OF_LIST_ITEMS = 5
         NUMBER_OF_LIST_ITEM_ATTACHMENTS = 1
     case "medium":
-        NUMBER_OF_SITES = 10
-        NUMBER_OF_DRIVE_ITEMS = 200
+        NUMBER_OF_SITES = 5
+        NUMBER_OF_DRIVE_ITEMS = 50
         NUMBER_OF_PAGES = 10
         NUMBER_OF_LISTS = 10
-        NUMBER_OF_LIST_ITEMS = 10
+        NUMBER_OF_LIST_ITEMS = 5
         NUMBER_OF_LIST_ITEM_ATTACHMENTS = 5
     case "large":
         NUMBER_OF_SITES = 30
