@@ -69,7 +69,6 @@ class PostgreSQLQueries(Queries):
 
     def all_schemas(self):
         """Query to get all schemas of database"""
-        pass
 
 
 class PostgreSQLAdvancedRulesValidator(AdvancedRulesValidator):

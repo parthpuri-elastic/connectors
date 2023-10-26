@@ -530,7 +530,6 @@ class MockSSL:
 
     def load_verify_locations(self, cadata):
         """This method verify locations"""
-        pass
 
 
 @pytest.mark.parametrize(

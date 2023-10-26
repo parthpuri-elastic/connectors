@@ -37,8 +37,6 @@ USER_ID_PATTERN = re.compile(r"<@([A-Z0-9]+)>")
 class ThrottledError(Exception):
     """Internal exception class to indicate that request was throttled by the API"""
 
-    pass
-
 
 class SlackClient:
     def __init__(self, configuration):

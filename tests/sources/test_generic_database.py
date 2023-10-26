@@ -35,7 +35,6 @@ class ConnectionSync:
 
     def __exit__(self, exception_type, exception_value, exception_traceback):
         """Make sure the dummy database connection gets closed"""
-        pass
 
     def execute(self, statement):
         """This method returns dummy cursor"""

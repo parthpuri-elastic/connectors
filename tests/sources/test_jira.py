@@ -320,7 +320,6 @@ class MockSsl:
 
     def load_verify_locations(self, cadata):
         """This method verify locations"""
-        pass
 
 
 class JSONAsyncMock(AsyncMock):

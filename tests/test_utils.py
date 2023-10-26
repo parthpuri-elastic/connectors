@@ -568,7 +568,6 @@ class MockSSL:
 
     def load_verify_locations(self, cadata):
         """This method verify locations"""
-        pass
 
 
 def test_ssl_context():

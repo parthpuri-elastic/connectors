@@ -83,7 +83,6 @@ class AIOResourceCollection:
 
     def __init__(self, *args, **kw):
         """Setup AIOResourceCollection"""
-        pass
 
     async def __anext__(self):
         """This method is used to return file object
@@ -136,7 +135,6 @@ class S3Object(dict):
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Make sure the dummy connection gets closed"""
-        pass
 
     async def _make_api_call(self, *args, **kw):
         """Make dummy API call"""

@@ -213,27 +213,19 @@ class NotFound(Exception):
     It's not an exception for us, we just want to return [], and this exception class facilitates it.
     """
 
-    pass
-
 
 class ThrottledError(Exception):
     """Internal exception class to indicate that request was throttled by the API"""
 
-    pass
-
 
 class InternalServerError(Exception):
     """Exception class to indicate that something went wrong on the server side."""
-
-    pass
 
 
 class PermissionsMissing(Exception):
     """Exception class to notify that specific Application Permission is missing for the credentials used.
     See: https://learn.microsoft.com/en-us/graph/permissions-reference
     """
-
-    pass
 
 
 class TokenFetchFailed(Exception):
@@ -242,8 +234,6 @@ class TokenFetchFailed(Exception):
 
     Error message will indicate human-readable reason.
     """
-
-    pass
 
 
 class GraphAPIToken:

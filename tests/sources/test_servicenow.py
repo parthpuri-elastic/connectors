@@ -59,7 +59,6 @@ class MockResponse:
 
     async def __aexit__(self, exc_type, exc, tb):
         """Closes an async with block"""
-        pass
 
 
 class StreamerReader:

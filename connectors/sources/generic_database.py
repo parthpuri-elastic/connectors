@@ -117,34 +117,27 @@ class Queries(ABC):
     @abstractmethod
     def ping(self):
         """Query to ping source"""
-        pass
 
     @abstractmethod
     def all_tables(self, **kwargs):
         """Query to get all tables"""
-        pass
 
     @abstractmethod
     def table_primary_key(self, **kwargs):
         """Query to get the primary key"""
-        pass
 
     @abstractmethod
     def table_data(self, **kwargs):
         """Query to get the table data"""
-        pass
 
     @abstractmethod
     def table_last_update_time(self, **kwargs):
         """Query to get the last update time of the table"""
-        pass
 
     @abstractmethod
     def table_data_count(self, **kwargs):
         """Query to get the number of rows in the table"""
-        pass
 
     @abstractmethod
     def all_schemas(self):
         """Query to get all schemas of database"""
-        pass

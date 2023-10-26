@@ -92,13 +92,9 @@ def _prefix_group(group):
 class TokenRetrievalError(Exception):
     """Exception class to notify that fetching of access token was not successful."""
 
-    pass
-
 
 class ThrottledError(Exception):
     """Internal exception class to indicate that request was throttled by the API"""
-
-    pass
 
 
 class InternalServerError(Exception):

@@ -192,7 +192,6 @@ class Cursor:
 
     async def __aexit__(self, exception_type, exception_value, exception_traceback):
         """Make sure the dummy database connection gets closed"""
-        pass
 
 
 class Connection:
@@ -212,7 +211,6 @@ class Connection:
 
     async def __aexit__(self, exception_type, exception_value, exception_traceback):
         """Make sure the dummy database connection gets closed"""
-        pass
 
 
 class MockSsl:
@@ -220,7 +218,6 @@ class MockSsl:
 
     def load_verify_locations(self, cadata):
         """This method verify locations"""
-        pass
 
 
 async def mock_mysql_response():

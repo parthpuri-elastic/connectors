@@ -165,19 +165,13 @@ def ews_format_to_datetime(source_datetime, timezone):
 class TokenFetchFailed(Exception):
     """Exception class to notify that connector was unable to fetch authentication token from Graph API"""
 
-    pass
-
 
 class UsersFetchFailed(Exception):
     """Exception class to notify that connector was unable to fetch users from Active Directory"""
 
-    pass
-
 
 class UnauthorizedException(Exception):
     """Exception class unauthorized calls"""
-
-    pass
 
 
 class Forbidden(Exception):

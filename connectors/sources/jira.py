@@ -81,8 +81,6 @@ USER_QUERY = "expand=groups,applicationRoles"
 class ThrottledError(Exception):
     """Internal exception class to indicate that request was throttled by the API"""
 
-    pass
-
 
 class InternalServerError(Exception):
     pass

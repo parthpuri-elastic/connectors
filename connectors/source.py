@@ -563,7 +563,6 @@ class BaseDataSource:
 
         Can be used to close connections
         """
-        pass
 
     def access_control_query(self, access_control):
         raise NotImplementedError
@@ -637,7 +636,6 @@ class BaseDataSource:
 
         Returns None. The changes are done in-place
         """
-        pass
 
     def serialize(self, doc):
         """Reads each element from the document and serializes it with respect to its datatype.

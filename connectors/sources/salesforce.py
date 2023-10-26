@@ -109,37 +109,25 @@ RELEVANT_SOBJECT_FIELDS = [
 class RateLimitedException(Exception):
     """Notifies that Salesforce has begun rate limiting the current account"""
 
-    pass
-
 
 class InvalidQueryException(Exception):
     """Notifies that a query was malformed or otherwise incorrect"""
-
-    pass
 
 
 class InvalidCredentialsException(Exception):
     """Notifies that credentials are invalid for fetching a Salesforce token"""
 
-    pass
-
 
 class TokenFetchException(Exception):
     """Notifies that an unexpected error occurred when fetching a Salesforce token"""
-
-    pass
 
 
 class ConnectorRequestError(Exception):
     """Notifies that a general uncaught 400 error occurred during a request, usually this is caused by the connector"""
 
-    pass
-
 
 class SalesforceServerError(Exception):
     """Notifies that an internal server error occurred in Salesforce"""
-
-    pass
 
 
 class SalesforceClient:

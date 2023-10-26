@@ -122,8 +122,6 @@ class NotFound(Exception):
     It's not an exception for us, we just want to return [], and this exception class facilitates it.
     """
 
-    pass
-
 
 class BadRequestError(Exception):
     """Internal exception class to handle 400's from the API.
@@ -131,25 +129,17 @@ class BadRequestError(Exception):
     Similar to the NotFound exception, this allows us to catch edge-case responses that should
     be translated as empty resutls, and let us return []."""
 
-    pass
-
 
 class InternalServerError(Exception):
     """Exception class to indicate that something went wrong on the server side."""
-
-    pass
 
 
 class ThrottledError(Exception):
     """Internal exception class to indicate that request was throttled by the API"""
 
-    pass
-
 
 class InvalidSharepointTenant(Exception):
     """Exception class to notify that tenant name is invalid or does not match tenant id provided"""
-
-    pass
 
 
 class TokenFetchFailed(Exception):
@@ -159,23 +149,17 @@ class TokenFetchFailed(Exception):
     Error message will indicate human-readable reason.
     """
 
-    pass
-
 
 class PermissionsMissing(Exception):
     """Exception class to notify that specific Application Permission is missing for the credentials used.
     See: https://learn.microsoft.com/en-us/graph/permissions-reference
     """
 
-    pass
-
 
 class SyncCursorEmpty(Exception):
     """Exception class to notify that incremental sync can't run because sync_cursor is empty.
     See: https://learn.microsoft.com/en-us/graph/delta-query-overview
     """
-
-    pass
 
 
 class MicrosoftSecurityToken:
@@ -1128,9 +1112,13 @@ async def _emails_and_usernames_of_domain_group(
 
 def _get_login_name(raw_login_name):
     if raw_login_name and (
-        raw_login_name.startswith("i:0#.f|membership|")
-        or raw_login_name.startswith("c:0o.c|federateddirectoryclaimprovider|")
-        or raw_login_name.startswith("c:0t.c|tenant|")
+        raw_login_name.startswith(
+            (
+                "i:0#.f|membership|",
+                "c:0o.c|federateddirectoryclaimprovider|",
+                "c:0t.c|tenant|",
+            )
+        )
     ):
         parts = raw_login_name.split("|")
 
@@ -2476,8 +2464,9 @@ class SharepointOnlineDataSource(BaseDataSource):
 
         # 'LoginName' looking like a group indicates a group
         is_group = (
-            login_name.startswith("c:0o.c|federateddirectoryclaimprovider|")
-            or login_name.startswith("c:0t.c|tenant|")
+            login_name.startswith(
+                ("c:0o.c|federateddirectoryclaimprovider|", "c:0t.c|tenant|")
+            )
             if login_name
             else False
         )

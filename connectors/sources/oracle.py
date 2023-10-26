@@ -60,7 +60,7 @@ class OracleQueries(Queries):
 
     def all_schemas(self):
         """Query to get all schemas of database"""
-        pass  # Multiple schemas not supported in Oracle
+        # Multiple schemas not supported in Oracle
 
 
 class OracleClient:

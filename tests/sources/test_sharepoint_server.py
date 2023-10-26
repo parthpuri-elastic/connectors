@@ -47,7 +47,6 @@ class MockSSL:
 
     def load_verify_locations(self, cadata):
         """This method verify locations"""
-        pass
 
 
 class MockResponse:
@@ -63,7 +62,6 @@ class MockResponse:
 
     async def __aexit__(self, exc_type, exc, tb):
         """Closes an async with block"""
-        pass
 
     async def __aenter__(self):
         """Enters an async with block"""
@@ -79,7 +77,6 @@ class MockObjectResponse:
 
     async def __aexit__(self, exc_type, exc, tb):
         """Closes an async with block"""
-        pass
 
     async def __aenter__(self):
         """Enters an async with block"""
@@ -916,7 +913,6 @@ class ClientSession:
 
     async def close(self):
         """Close method of Mock Client Session Class"""
-        pass
 
 
 @pytest.mark.asyncio

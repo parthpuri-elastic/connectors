@@ -538,7 +538,6 @@ class ClientSession:
 
     async def close(self):
         """Close method of Mock Client Session Class"""
-        pass
 
 
 async def create_fake_coroutine(item):
