@@ -1626,10 +1626,11 @@ class GitHubDataSource(BaseDataSource):
         except ForbiddenException:
             raise
         except Exception as exception:
-            self._logger.warning(
+            self._logger.exception(
                 f"Something went wrong while fetching the repository. Exception: {exception}",
                 exc_info=True,
             )
+            raise
 
     def _convert_repo_object_to_doc(self, repo_object):
         repo_object = repo_object.copy()
@@ -1764,10 +1765,11 @@ class GitHubDataSource(BaseDataSource):
         except ForbiddenException:
             raise
         except Exception as exception:
-            self._logger.warning(
+            self._logger.exception(
                 f"Something went wrong while fetching the pull requests. Exception: {exception}",
                 exc_info=True,
             )
+            raise
 
     async def _extract_issues(self, response, owner, repo, response_key):
         for issue in nested_get_from_dict(  # pyright: ignore
@@ -1821,10 +1823,11 @@ class GitHubDataSource(BaseDataSource):
         except ForbiddenException:
             raise
         except Exception as exception:
-            self._logger.warning(
+            self._logger.exception(
                 f"Something went wrong while fetching the issues. Exception: {exception}",
                 exc_info=True,
             )
+            raise
 
     async def _fetch_last_commit_timestamp(self, repo_name, path):
         commit, *_ = await self.github_client.get_github_item(  # pyright: ignore
@@ -1877,10 +1880,11 @@ class GitHubDataSource(BaseDataSource):
         except ForbiddenException:
             raise
         except Exception as exception:
-            self._logger.warning(
+            self._logger.exception(
                 f"Something went wrong while fetching the files of {repo_name}. Exception: {exception}",
                 exc_info=True,
             )
+            raise
 
     async def get_content(self, attachment, timestamp=None, doit=False):
         """Extracts the content for Apache TIKA supported file types.

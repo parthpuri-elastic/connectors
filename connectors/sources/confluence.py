@@ -259,10 +259,10 @@ class ConfluenceClient:
                         links.get("next")[1:],
                     )
             except Exception as exception:
-                self._logger.warning(
-                    f"Skipping data for type {url_name} from {url}. Exception: {exception}."
+                self._logger.exception(
+                    f"Something went wrong while fetching {url_name} from {url}. Exception: {exception}."
                 )
-                break
+                raise
 
     async def paginated_api_call_for_datacenter_syncrule(self, url_name, **url_kwargs):
         """Make a paginated API call for datacenter using the passed url_name.
@@ -290,10 +290,10 @@ class ConfluenceClient:
                 if len(json_response.get("results", [])) < LIMIT:
                     break
             except Exception as exception:
-                self._logger.warning(
-                    f"Skipping data for type {url_name} from {url}. Exception: {exception}."
+                self._logger.exception(
+                    f"Something went wrong while fetching {url_name} from {url}. Exception: {exception}."
                 )
-                break
+                raise
 
     async def search_by_query(self, query):
         if self.data_source_type == CONFLUENCE_DATA_CENTER:

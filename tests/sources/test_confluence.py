@@ -250,7 +250,8 @@ RESPONSE_SEARCH_RESULT = {
             "entityType": "space",
             "ancestors": [],
         },
-    ]
+    ],
+    "_links": {},
 }
 
 
@@ -1528,3 +1529,18 @@ async def test_fetch_page_blog_documents_with_labels():
                     "ancestors": [{"title": "parent_title"}],
                     "labels": ["label1", "label2"],
                 }
+
+
+@pytest.mark.asyncio
+@patch("connectors.utils.time_to_sleep_between_retries", Mock(return_value=0))
+async def test_paginated_api_call_with_exception():
+    async with create_confluence_source() as source:
+        with patch(
+            "aiohttp.ClientSession.get",
+            side_effect=Exception,
+        ):
+            with pytest.raises(Exception):
+                async for _ in source.confluence_client.paginated_api_call(
+                    url_name="space", api_query="api_query"
+                ):
+                    pass

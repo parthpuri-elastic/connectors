@@ -1232,9 +1232,31 @@ async def test_fetch_repos_organization():
 @pytest.mark.asyncio
 async def test_fetch_repos_when_user_repos_is_available():
     async with create_github_source(repos="demo_user/demo_repo, , demo_repo") as source:
+        expected_response = [
+            {
+                "nameWithOwner": "demo_user/demo_repo",
+                "_id": "123",
+                "_timestamp": "2023-04-17T12:55:01Z",
+                "type": "Repository",
+            },
+            {
+                "nameWithOwner": "demo_user/demo_repo",
+                "_id": "123",
+                "_timestamp": "2023-04-17T12:55:01Z",
+                "type": "Repository",
+            },
+        ]
+        source._user = "owner1"
+        actual_response = []
         source.github_client.graphql = AsyncMock(
             side_effect=[
-                {"viewer": {"login": "owner1"}},
+                {
+                    "repository": {
+                        "id": "123",
+                        "updatedAt": "2023-04-17T12:55:01Z",
+                        "nameWithOwner": "demo_user/demo_repo",
+                    }
+                },
                 {
                     "repository": {
                         "id": "123",
@@ -1245,18 +1267,14 @@ async def test_fetch_repos_when_user_repos_is_available():
             ]
         )
         async for repo in source._fetch_repos():
-            assert repo == {
-                "nameWithOwner": "demo_user/demo_repo",
-                "_id": "123",
-                "_timestamp": "2023-04-17T12:55:01Z",
-                "type": "Repository",
-            }
+            actual_response.append(repo)
+        assert actual_response == expected_response
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     "exception",
-    [UnauthorizedException, ForbiddenException],
+    [UnauthorizedException, ForbiddenException, Exception],
 )
 async def test_fetch_repos_with_client_exception(exception):
     async with create_github_source() as source:
@@ -1329,7 +1347,7 @@ async def test_fetch_issues():
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     "exception",
-    [UnauthorizedException, ForbiddenException],
+    [UnauthorizedException, ForbiddenException, Exception],
 )
 async def test_fetch_issues_with_client_exception(exception):
     async with create_github_source() as source:
@@ -1349,7 +1367,7 @@ async def test_fetch_pull_requests():
             source.github_client,
             "paginated_api_call",
             side_effect=[
-                AsyncIterator([MOCK_RESPONSE_PULL]),
+                AsyncIterator([pull_request()]),
                 AsyncIterator([MOCK_COMMENTS_RESPONSE]),
                 AsyncIterator([MOCK_REVIEW_REQUESTED_RESPONSE]),
                 AsyncIterator([MOCK_LABELS_RESPONSE]),
@@ -1367,7 +1385,7 @@ async def test_fetch_pull_requests():
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
     "exception",
-    [UnauthorizedException, ForbiddenException],
+    [UnauthorizedException, ForbiddenException, Exception],
 )
 async def test_fetch_pull_requests_with_client_exception(exception):
     async with create_github_source() as source:
